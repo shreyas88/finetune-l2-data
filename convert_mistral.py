@@ -1,5 +1,5 @@
 import json
-import pandas
+import pandas as pd
 
 def text_formatting(data):
 
