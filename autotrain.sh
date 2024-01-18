@@ -1,0 +1,15 @@
+autotrain llm \
+--train \
+--model mistralai/Mistral-7B-Instruct-v0.1 \
+--project-name myllm-finetune_$1 \
+--data-path data/ \
+--text-column text \
+--lr 2e-4 \
+--batch-size 1 \
+--epochs 1 \
+--block-size 1024 \
+--warmup-ratio 0.1 \
+--lora-r 16 \
+--lora-alpha 32 \
+--lora-dropout 0.045 \
+--weight-decay 0.01 \
