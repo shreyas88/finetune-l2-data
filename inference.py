@@ -1,6 +1,6 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_path = "my_autotrain_llm"
+model_path = "myllm-finetune_fp16_batch24"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path)
 input_text = "Health benefits of regular exercise"
