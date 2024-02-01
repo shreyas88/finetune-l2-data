@@ -10,7 +10,7 @@ args = parser.parse_args()
 
 model_path = "myllm-finetune_fp16_batch16"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForCausalLM.from_pretrained(model_path)
+model = AutoModelForCausalLM.from_pretrained(model_path, max_new_tokens=500)
 
 # Use the input text from the command line argument
 input_text = args.input_text
