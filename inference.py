@@ -8,7 +8,7 @@ parser.add_argument("--input_text", type=str, required=True, help="Input text to
 # Parse arguments
 args = parser.parse_args()
 
-model_path = "myllm-finetune_fp16_batch24"
+model_path = "myllm-finetune_fp16_batch16"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path,max_new_tokens=500)
 
