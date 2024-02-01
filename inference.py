@@ -10,12 +10,12 @@ args = parser.parse_args()
 
 model_path = "myllm-finetune_fp16_batch16"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForCausalLM.from_pretrained(model_path, max_new_tokens=500)
+model = AutoModelForCausalLM.from_pretrained(model_path)
 
 # Use the input text from the command line argument
 input_text = args.input_text
 input_ids = tokenizer.encode(input_text, return_tensors="pt")
-output = model.generate(input_ids)
+output = model.generate(input_ids, max_new_tokens=500)
 predicted_text = tokenizer.decode(output[0], skip_special_tokens=False)
 print(predicted_text)
 
