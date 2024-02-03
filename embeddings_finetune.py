@@ -13,8 +13,8 @@ class WOBEmbeddings(BaseEmbedding):
 
     def __init__(self, **kwargs: Any) -> None:
       self._model_path = "myllm-finetune_fp16_batch16"
-      self._tokenizer = AutoTokenizer.from_pretrained(model_path)
-      self._model = AutoModelForCausalLM.from_pretrained(model_path)
+      self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
+      self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
       super().__init__(**kwargs)
 
     @classmethod
