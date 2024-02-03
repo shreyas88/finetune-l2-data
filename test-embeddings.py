@@ -20,7 +20,7 @@ input_ids = tokenizer.encode(input_text, return_tensors="pt")
 
 model.eval()
 with torch.no_grad():
-    last_hidden_state = model(**input_ids, output_hidden_states=True).hidden_states[-1]
+    last_hidden_state = model(**input_ids, output_hidden_states=True).hidden_states
 sum_embeddings = torch.sum(last_hidden_state, dim=1)
 
 print(sum_embeddings)
