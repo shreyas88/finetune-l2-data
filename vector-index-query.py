@@ -1,6 +1,7 @@
-from llama_index import Document,VectorStoreIndex
+from llama_index import Document,VectorStoreIndex,ServiceContext
 import pandas as pd
 import argparse
+from embeddings-finetune import WOBEmbeddings
 
 # Initialize parser
 parser = argparse.ArgumentParser(description="Generate text from a language model")
@@ -14,9 +15,10 @@ df['finalText'] = df['instruction']+" " + df['text']
 docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
 # embedding generation
-
-
-index = VectorStoreIndex.from_documents(docs, show_progress=True)
+service_context = ServiceContext.from_defaults(
+    embed_model=WOBEmbeddings()
+)
+index = VectorStoreIndex.from_documents(docs, service_context=service_context, show_progress=True)
 
 query_engine = index.as_query_engine()
 response = query_engine.query(args.query)
