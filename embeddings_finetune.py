@@ -8,9 +8,9 @@ import torch
 
 class WOBEmbeddings(BaseEmbedding):
     def __init__(self, **kwargs: Any) -> None:
-	self.model_path = "myllm-finetune_fp16_batch16"
-	self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-	self.model = AutoModelForCausalLM.from_pretrained(model_path)	
+        self.model_path = "myllm-finetune_fp16_batch16"
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.model = AutoModelForCausalLM.from_pretrained(model_path)	
         super().__init__(**kwargs)
 
     @classmethod
