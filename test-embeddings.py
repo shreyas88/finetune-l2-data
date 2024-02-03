@@ -2,6 +2,14 @@ import argparse
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
+# Initialize parser
+parser = argparse.ArgumentParser(description="Generate text from a language model")
+# Adding argument
+parser.add_argument("--input_text", type=str, required=True, help="Input text to generate text from")
+# Parse arguments
+args = parser.parse_args()
+
+
 model_path = "myllm-finetune_fp16_batch16"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path)
