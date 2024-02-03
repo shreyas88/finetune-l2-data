@@ -1,7 +1,7 @@
 from llama_index import Document,VectorStoreIndex,ServiceContext
 import pandas as pd
 import argparse
-from embeddings-finetune import WOBEmbeddings
+from embeddings_finetune import WOBEmbeddings
 
 # Initialize parser
 parser = argparse.ArgumentParser(description="Generate text from a language model")
