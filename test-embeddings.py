@@ -9,7 +9,7 @@ parser.add_argument("--input_text", type=str, required=True, help="Input text to
 # Parse arguments
 args = parser.parse_args()
 
-
+'''
 model_path = "myllm-finetune_fp16_batch16"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path)
@@ -24,5 +24,6 @@ with torch.no_grad():
 sum_embeddings = torch.sum(last_hidden_state, dim=1)
 
 print(sum_embeddings)
+'''
 
 

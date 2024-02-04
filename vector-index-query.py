@@ -3,12 +3,15 @@ import pandas as pd
 import argparse
 from embeddings_finetune import WOBEmbeddings
 
+llama_index.set_global_handler("simple")
+
 # Initialize parser
 parser = argparse.ArgumentParser(description="Generate text from a language model")
 # Adding argument
 parser.add_argument("--query", type=str, required=True, help="Input text to generate text from")
 # Parse arguments
 args = parser.parse_args()
+
 
 df = pd.read_csv('data/train_chat_sample.csv')
 df['finalText'] = df['instruction']+" " + df['text']
