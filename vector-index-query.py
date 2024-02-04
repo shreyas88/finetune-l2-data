@@ -10,13 +10,13 @@ parser.add_argument("--query", type=str, required=True, help="Input text to gene
 # Parse arguments
 args = parser.parse_args()
 
-df = pd.read_csv('data/train_chat.csv')
+df = pd.read_csv('data/train_chat_sample.csv')
 df['finalText'] = df['instruction']+" " + df['text']
 docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
 # embedding generation
 service_context = ServiceContext.from_defaults(
-    embed_model=WOBEmbeddings(embed_batch_size=64), llm=None
+    embed_model=WOBEmbeddings(embed_batch_size=10), llm=None
 )
 index = VectorStoreIndex.from_documents(docs, service_context=service_context, show_progress=True)
 
