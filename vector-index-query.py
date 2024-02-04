@@ -16,7 +16,7 @@ docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
 # embedding generation
 service_context = ServiceContext.from_defaults(
-    embed_model=WOBEmbeddings(), llm=None
+    embed_model=WOBEmbeddings(embed_batch_size=64), llm=None
 )
 index = VectorStoreIndex.from_documents(docs, service_context=service_context, show_progress=True)
 
