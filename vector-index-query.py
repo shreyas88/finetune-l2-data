@@ -1,5 +1,5 @@
-from llama_index import Document,VectorStoreIndex,ServiceContext,LangchainEmbedding
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+from llama_index import Document,VectorStoreIndex,ServiceContext
+from llama_index.embeddings import HuggingFaceEmbedding
 import pandas as pd
 import argparse
 
@@ -14,7 +14,7 @@ df = pd.read_csv('data/train_chat.csv')
 df['finalText'] = df['instruction']+" " + df['text']
 docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
-embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name="myllm-finetune_fp16_batch16"))
+embed_model = HuggingFaceEmbedding(model_name="myllm-finetune_fp16_batch16")
 
 # embedding generation
 service_context = ServiceContext.from_defaults(llm=None,embed_model=embed_model)
