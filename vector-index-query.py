@@ -2,6 +2,7 @@ from llama_index import Document,VectorStoreIndex,ServiceContext
 import pandas as pd
 import argparse
 from embeddings_finetune import WOBEmbeddings
+import llama_index
 
 llama_index.set_global_handler("simple")
 
