@@ -22,8 +22,8 @@ class WOBEmbeddings(BaseEmbedding):
       return "wobembeddings"
     
     def encode(self, texts):
-      encoded_dict = self._tokenizer.batch_encode_plus(texts, add_special_tokens=True, max_length=160, 
-                                                       padding='max_length',
+      encoded_dict = self._tokenizer.batch_encode_plus(texts, add_special_tokens=True, max_length=4096, 
+                                                       padding='longest',
                                                        return_attention_mask=True, truncation=True, return_tensors='pt')
       input_ids = encoded_dict['input_ids']
       attention_masks = encoded_dict['attention_mask']
