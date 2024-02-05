@@ -59,9 +59,9 @@ index = VectorStoreIndex.from_documents(docs, service_context=service_context, s
 
 index = VectorStoreIndex.from_vector_store(
     vector_store=vector_store,
-    service_context=ServiceContext.from_defaults(embed_model=WOBEmbeddings()),
+    service_context=ServiceContext.from_defaults(
+    embed_model=WOBEmbeddings(embed_batch_size=10), llm=None)
 )
-
 
 query_engine = index.as_query_engine()
 response = query_engine.query(args.query)
