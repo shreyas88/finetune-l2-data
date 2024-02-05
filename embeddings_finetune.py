@@ -15,11 +15,6 @@ class WOBEmbeddings(BaseEmbedding):
     def __init__(self, **kwargs: Any) -> None:
       self._model_path = "myllm-finetune_fp16_batch16"
       self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
-      bnb_config = BitsAndBytesConfig(
-        load_in_4bit= True,
-        bnb_4bit_quant_type= "nf4",
-        bnb_4bit_compute_dtype= torch.bfloat16,
-        bnb_4bit_use_double_quant= False)
       self._model = AutoModelForCausalLM.from_pretrained(self._model_path,
                                                          torch_dtype=torch.bfloat16,
                                                          device_map="auto")
@@ -49,7 +44,8 @@ class WOBEmbeddings(BaseEmbedding):
     def embed_text(self, text: str) -> List[float]:
       #self._model.cuda()
       input_ids = self._tokenizer.encode(text, return_tensors="pt").cuda()
-      last_hidden_state = self._model(**{"input_ids":input_ids, "output_hidden_states":True}).hidden_states[-1].detach().cpu()   
+      with torch.no_grad():
+        last_hidden_state = self._model(**{"input_ids":input_ids, "output_hidden_states":True}).hidden_states[-1].detach().cpu()   
       return torch.sum(last_hidden_state, dim=1).squeeze(0).tolist()
     
     def batch_embed_text(self, texts: List[str]) -> List[List[float]]:

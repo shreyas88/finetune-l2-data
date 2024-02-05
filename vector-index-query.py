@@ -61,7 +61,9 @@ if args.load:
 
 # Ingest directly into a vector db
 nodes = pipeline.run(documents=docs, show_progress=True)
-pipeline.persist("./pipeline_storage")
+
+if not args.load:
+    pipeline.persist("./pipeline_storage")
 
 index = VectorStoreIndex.from_vector_store(
     vector_store=vector_store,
