@@ -49,7 +49,7 @@ class WOBEmbeddings(BaseEmbedding):
       last_hidden_state = self._model(**{"input_ids":input_ids, "attention_mask":attention_masks, 
                                          "output_hidden_states":True}).hidden_states[-1].detach().cpu()    
       #self._model.cpu()
-      self._model.cpu()
+      #self._model.cpu()
       del input_ids, attention_masks
       #gc.collect()
       torch.cuda.empty_cache()
