@@ -47,6 +47,8 @@ class WOBEmbeddings(BaseEmbedding):
       last_hidden_state = self._model(**{"input_ids":input_ids, "attention_mask":attention_masks, 
                                          "output_hidden_states":True}).hidden_states[-1].detach().cpu()      
       #self._model.cpu()
+      del input_ids
+      del attention_masks
       return torch.sum(last_hidden_state, dim=1).tolist()
 
     def _get_query_embedding(self, query: str) -> List[float]:
