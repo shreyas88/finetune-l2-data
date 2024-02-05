@@ -7,10 +7,14 @@ from llama_index.llms import (
     LLMMetadata,
 )
 from llama_index.llms.base import llm_completion_callback
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
+from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedTokenizer, PreTrainedModel
+from llama_index.bridge.pydantic import PrivateAttr
 
 class ResponseCompletionLLM(CustomLLM):
+    model_path: str  = PrivateAttr()
+    tokenizer: PreTrainedTokenizer = PrivateAttr()
+    model: PreTrainedModel = PrivateAttr()
+
     context_window: int = 4096
     num_output: int = 512
     model_name: str = "mistral-instruct-7b"
