@@ -17,6 +17,7 @@ class WOBEmbeddings(BaseEmbedding):
       self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
       self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
       self._model.eval()
+      self._model.cuda()
       #self._model.cuda()
       super().__init__(**kwargs)
 
@@ -45,7 +46,6 @@ class WOBEmbeddings(BaseEmbedding):
       return torch.sum(last_hidden_state, dim=1).squeeze(0).tolist()
     
     def batch_embed_text(self, texts: List[str]) -> List[List[float]]:
-      self._model.cuda()
       input_ids, attention_masks = self.encode(texts)
       with torch.no_grad():
         last_hidden_state = self._model(**{"input_ids":input_ids, "attention_mask":attention_masks, 
