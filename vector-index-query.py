@@ -26,7 +26,7 @@ args = parser.parse_args()
 if args.batch_size is None:
     args.batch_size = 10
 
-df = pd.read_csv('data/train_chat.csv')
+df = pd.read_csv('data/train_chat_sample.csv')
 df['finalText'] = df['instruction']+" " + df['text']
 docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
