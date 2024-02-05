@@ -39,16 +39,17 @@ vector_store = WeaviateVectorStore(
     weaviate_client=client, index_name="CachingTest"
 )
 
+'''
 ingest_cache = IngestionCache(
     cache=RedisCache.from_host_and_port(host="127.0.0.1", port=6379),
     collection="my_test_cache",
 )
+'''
 
 pipeline = IngestionPipeline(
     transformations=[
         WOBEmbeddings(embed_batch_size=args.batch_size),
     ],
-    cache=ingest_cache,
     vector_store=vector_store,
 )
 
