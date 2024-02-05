@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description="Generate text from a language mode
 # Adding argument
 parser.add_argument("--query", type=str, required=True, help="Input text to generate text from")
 parser.add_argument("--batch_size", type=int, required=False, help="Batch size for embedding generation")
-parser.add_argument("--load", type=int, required=False, help="Load pipeline")
+parser.add_argument("--load", type=bool, required=False, help="Load pipeline")
 
 
 # Parse arguments
