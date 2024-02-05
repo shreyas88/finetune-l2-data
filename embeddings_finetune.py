@@ -43,9 +43,8 @@ class WOBEmbeddings(BaseEmbedding):
     def batch_embed_text(self, texts: List[str]) -> List[List[float]]:
       input_ids, attention_masks = self.encode(texts)
       last_hidden_state = self._model(**{"input_ids":input_ids, "attention_mask":attention_masks, 
-                                         "output_hidden_states":True}).hidden_states[-1]
-      list_tensors = torch.sum(last_hidden_state, dim=1).tolist()
-      return [ tensor.squeeze(0).tolist() for tensor in list_tensors ]
+                                         "output_hidden_states":True}).hidden_states[-1]      
+      return torch.sum(last_hidden_state, dim=1).tolist()
 
     def _get_query_embedding(self, query: str) -> List[float]:
       return self.embed_text(query)
