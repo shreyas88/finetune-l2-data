@@ -8,6 +8,8 @@ from llama_index.ingestion import IngestionPipeline, IngestionCache
 from llama_index.ingestion.cache import RedisCache
 from llama_index.vector_stores import WeaviateVectorStore
 import weaviate
+from llama_index.storage.docstore import SimpleDocumentStore
+
 
 
 llama_index.set_global_handler("simple")
@@ -51,6 +53,7 @@ pipeline = IngestionPipeline(
         WOBEmbeddings(embed_batch_size=args.batch_size),
     ],
     vector_store=vector_store,
+    docstore=SimpleDocumentStore()
 )
 
 if args.load:
