@@ -16,9 +16,13 @@ llama_index.set_global_handler("simple")
 parser = argparse.ArgumentParser(description="Generate text from a language model")
 # Adding argument
 parser.add_argument("--query", type=str, required=True, help="Input text to generate text from")
+parser.add_argument("--batch_size", type=int, required=False, help="Batch size for embedding generation")
+
 # Parse arguments
 args = parser.parse_args()
 
+if args.batch_size is None:
+    args.batch_size = 10
 
 df = pd.read_csv('data/train_chat_sample.csv')
 df['finalText'] = df['instruction']+" " + df['text']
@@ -38,9 +42,10 @@ ingest_cache = IngestionCache(
     collection="my_test_cache",
 )
 
+
 pipeline = IngestionPipeline(
     transformations=[
-        WOBEmbeddings(embed_batch_size=10),
+        WOBEmbeddings(embed_batch_size=args.batch_size),
     ],
     cache=ingest_cache,
     vector_store=vector_store,
@@ -48,6 +53,8 @@ pipeline = IngestionPipeline(
 
 # Ingest directly into a vector db
 nodes = pipeline.run(documents=docs)
+
+pipeline.persist("./pipeline_storage")
 
 # embedding generation
 '''
@@ -60,7 +67,7 @@ index = VectorStoreIndex.from_documents(docs, service_context=service_context, s
 index = VectorStoreIndex.from_vector_store(
     vector_store=vector_store,
     service_context=ServiceContext.from_defaults(
-    embed_model=WOBEmbeddings(embed_batch_size=10), llm=None)
+    embed_model=WOBEmbeddings(embed_batch_size=args.batch_size), llm=None)
 )
 
 query_engine = index.as_query_engine()
