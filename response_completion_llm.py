@@ -21,8 +21,8 @@ class ResponseCompletionLLM(CustomLLM):
 
     def __init__(self, *args, **kwargs):
         self._model_path = "myllm-finetune_fp16_batch16"
-        self._model = AutoModelForCausalLM.from_pretrained(self.model_path)
-        self._tokenizer = AutoTokenizer.from_pretrained(self.model_path)
+        self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
+        self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
         super().__init__(*args, **kwargs)
 
     @property
