@@ -2,7 +2,7 @@ from typing import Any, List
 
 from llama_index.bridge.pydantic import PrivateAttr
 from llama_index.embeddings.base import BaseEmbedding
-from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedTokenizer, PreTrainedModel
+from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedTokenizer, PreTrainedModel, BitsAndBytesConfig
 import torch
 import gc
 
@@ -15,7 +15,13 @@ class WOBEmbeddings(BaseEmbedding):
     def __init__(self, **kwargs: Any) -> None:
       self._model_path = "myllm-finetune_fp16_batch16"
       self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
-      self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
+      bnb_config = BitsAndBytesConfig(
+        load_in_4bit= True,
+        bnb_4bit_quant_type= "nf4",
+        bnb_4bit_compute_dtype= torch.bfloat16,
+        bnb_4bit_use_double_quant= False)
+      self._model = AutoModelForCausalLM.from_pretrained(self._model_path,load_in_4bit=True,
+                                                         quantization_config=bnb_config,torch_dtype=torch.bfloat16)
       self._model.eval()
       self._model.cuda()
       #self._model.cuda()
