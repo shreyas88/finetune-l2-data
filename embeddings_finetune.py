@@ -4,6 +4,7 @@ from llama_index.bridge.pydantic import PrivateAttr
 from llama_index.embeddings.base import BaseEmbedding
 from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedTokenizer, PreTrainedModel
 import torch
+import gc
 
 
 class WOBEmbeddings(BaseEmbedding):
@@ -15,7 +16,7 @@ class WOBEmbeddings(BaseEmbedding):
       self._model_path = "myllm-finetune_fp16_batch16"
       self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
       self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
-      self._model.cuda()
+      #self._model.cuda()
       super().__init__(**kwargs)
 
     @classmethod
@@ -43,12 +44,15 @@ class WOBEmbeddings(BaseEmbedding):
       return torch.sum(last_hidden_state, dim=1).squeeze(0).tolist()
     
     def batch_embed_text(self, texts: List[str]) -> List[List[float]]:
+      self._model.cuda()
       input_ids, attention_masks = self.encode(texts)
       last_hidden_state = self._model(**{"input_ids":input_ids, "attention_mask":attention_masks, 
-                                         "output_hidden_states":True}).hidden_states[-1].detach().cpu()      
+                                         "output_hidden_states":True}).hidden_states[-1].detach().cpu()    
       #self._model.cpu()
-      del input_ids
-      del attention_masks
+      self._model.cpu()
+      del input_ids, self._model, attention_masks
+      gc.collect()
+      torch.cuda.empty_cache()
       return torch.sum(last_hidden_state, dim=1).tolist()
 
     def _get_query_embedding(self, query: str) -> List[float]:
