@@ -36,7 +36,7 @@ class WOBEmbeddings(BaseEmbedding):
       return self._get_text_embedding(text)
 
     def embed_text(self, text: str) -> List[float]:
-      self._model.cuda()
+      #self._model.cuda()
       input_ids = self._tokenizer.encode(text, return_tensors="pt").to("cuda")
       last_hidden_state = self._model(**{"input_ids":input_ids, "output_hidden_states":True}).hidden_states[-1].detach().cpu()
       return torch.sum(last_hidden_state, dim=1).squeeze(0).tolist()
