@@ -25,8 +25,8 @@ class WOBEmbeddings(BaseEmbedding):
       encoded_dict = self._tokenizer.batch_encode_plus(texts, add_special_tokens=True, max_length=4096, 
                                                        padding='longest',
                                                        return_attention_mask=True, truncation=True, return_tensors='pt')
-      input_ids = encoded_dict['input_ids']
-      attention_masks = encoded_dict['attention_mask']
+      input_ids = encoded_dict['input_ids'].to("cuda")
+      attention_masks = encoded_dict['attention_mask'].to("cuda")
       return input_ids, attention_masks
 
     async def _aget_query_embedding(self, query: str) -> List[float]:
@@ -36,7 +36,7 @@ class WOBEmbeddings(BaseEmbedding):
       return self._get_text_embedding(text)
 
     def embed_text(self, text: str) -> List[float]:
-      input_ids = self._tokenizer.encode(text, return_tensors="pt")
+      input_ids = self._tokenizer.encode(text, return_tensors="pt").to("cuda")
       last_hidden_state = self._model(**{"input_ids":input_ids, "output_hidden_states":True}).hidden_states[-1]
       return torch.sum(last_hidden_state, dim=1).squeeze(0).tolist()
     

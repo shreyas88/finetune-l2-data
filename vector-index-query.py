@@ -17,6 +17,8 @@ parser = argparse.ArgumentParser(description="Generate text from a language mode
 # Adding argument
 parser.add_argument("--query", type=str, required=True, help="Input text to generate text from")
 parser.add_argument("--batch_size", type=int, required=False, help="Batch size for embedding generation")
+parser.add_argument("--load", type=int, required=False, help="Load pipeline")
+
 
 # Parse arguments
 args = parser.parse_args()
@@ -24,7 +26,7 @@ args = parser.parse_args()
 if args.batch_size is None:
     args.batch_size = 10
 
-df = pd.read_csv('data/train_chat_sample.csv')
+df = pd.read_csv('data/train_chat.csv')
 df['finalText'] = df['instruction']+" " + df['text']
 docs = [Document(text=t[1]) for t in df['finalText'].items()]
 
@@ -42,7 +44,6 @@ ingest_cache = IngestionCache(
     collection="my_test_cache",
 )
 
-
 pipeline = IngestionPipeline(
     transformations=[
         WOBEmbeddings(embed_batch_size=args.batch_size),
@@ -51,23 +52,17 @@ pipeline = IngestionPipeline(
     vector_store=vector_store,
 )
 
+if args.load:
+    pipeline.load("./pipeline_storage")
+
 # Ingest directly into a vector db
-nodes = pipeline.run(documents=docs)
-
+nodes = pipeline.run(documents=docs, show_progress=True)
 pipeline.persist("./pipeline_storage")
-
-# embedding generation
-'''
-service_context = ServiceContext.from_defaults(
-    embed_model=WOBEmbeddings(embed_batch_size=10), llm=None
-)
-index = VectorStoreIndex.from_documents(docs, service_context=service_context, show_progress=True)
-'''
 
 index = VectorStoreIndex.from_vector_store(
     vector_store=vector_store,
     service_context=ServiceContext.from_defaults(
-    embed_model=WOBEmbeddings(embed_batch_size=args.batch_size), llm=None)
+    embed_model=WOBEmbeddings(embed_batch_size=args.batch_size), llm=None),
 )
 
 query_engine = index.as_query_engine()
