@@ -20,7 +20,8 @@ class ResponseCompletionLLM(CustomLLM):
     model_name: str = "mistral-instruct-7b"
 
     def __init__(self, *args, **kwargs):
-        self._model_path = "myllm-finetune_fp16_batch16"
+        #self._model_path = "myllm-finetune_fp16_batch16"
+        self._model_path = "mistralai/Mistral-7B-Instruct-v0.1"
         self._model = AutoModelForCausalLM.from_pretrained(self._model_path)
         self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
         super().__init__(*args, **kwargs)
