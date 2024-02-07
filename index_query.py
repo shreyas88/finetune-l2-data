@@ -34,14 +34,22 @@ index = VectorStoreIndex.from_vector_store(
         embed_model=WOBEmbeddings(), llm=ResponseCompletionLLM()),
 )
 
-
+'''
 template = (
     "<s>[INST] We have provided context information below. \n"
     "---------------------\n"
     "{context_str}"
     "\n---------------------\n"
     "Given this information, please answer the following question,\n"
-    "Try to avoid RAFO's(read and find out) as much as possible : {query_str}\n [/INST]"
+    "Try to avoid RAFO's(read and find) as much as possible : {query_str}\n [/INST]"
+)
+'''
+template = (
+    "<s>[INST] We have provided context information below. \n"
+    "---------------------\n"
+    "{context_str}"
+    "\n---------------------\n"
+    "Given this information, please answer the following question: {query_str}\n [/INST]"
 )
 qa_template = PromptTemplate(template)
 
