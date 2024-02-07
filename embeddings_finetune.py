@@ -57,10 +57,13 @@ class WOBEmbeddings(BaseEmbedding):
                                            "output_hidden_states":True}).hidden_states[-1].detach().cpu()    
       #self._model.cpu()
       #self._model.cpu()
-      del input_ids_cuda, attention_masks_cuda
+      # ignore padding tokens when extracting embeddings
+      no_padded_tokens_embeddings = last_hidden_state * attention_masks[...,None].float()
+      sentence_embeddings = torch.sum(no_padded_tokens_embeddings, dim=1)/attention_masks.sum(dim=1, keepdim=True).float()
+      del input_ids_cuda, attention_masks_cuda, no_padded_tokens_embeddings
       #gc.collect()
       torch.cuda.empty_cache()
-      return torch.sum(last_hidden_state, dim=1).tolist()
+      return sentence_embeddings.tolist()
 
     def _get_query_embedding(self, query: str) -> List[float]:
       return self.embed_text(query)

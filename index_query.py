@@ -40,7 +40,8 @@ template = (
     "---------------------\n"
     "{context_str}"
     "\n---------------------\n"
-    "Given this information, please answer the question: {query_str}\n [/INST]"
+    "Given this information, please answer the following question,\n"
+    "Try to avoid RAFO's(read and find out) as much as possible : {query_str}\n [/INST]"
 )
 qa_template = PromptTemplate(template)
 
