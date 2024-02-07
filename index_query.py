@@ -34,7 +34,7 @@ index = VectorStoreIndex.from_vector_store(
         embed_model=WOBEmbeddings(), llm=ResponseCompletionLLM()),
 )
 
-'''
+
 template = (
     "<s>[INST] We have provided context information below. \n"
     "---------------------\n"
@@ -51,6 +51,7 @@ template = (
     "\n---------------------\n"
     "Given this information, please answer the following question: {query_str}\n [/INST]"
 )
+'''
 qa_template = PromptTemplate(template)
 
 query_engine = index.as_query_engine(text_qa_template=qa_template)
